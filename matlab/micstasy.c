@@ -103,17 +103,16 @@ void mexFunction( int nlhs, mxArray *plhs[],  int nrhs, const mxArray *prhs[])
 		}
 
 		if(pMicstasy != NULL)
-			mexErrMsgIdAndTxt("micstasy:init", "micstasy already initialized");
+			mexWarnMsgIdAndTxt ("micstasy:init", "micstasy already initialized");
+        else
+        {
+            if(DEBUG) mexPrintf("calling micstasy_init(0x%x,0x%x,0x%x,0x%x)\n", midiDeviceIn, midiDeviceOut, bankNumber, deviceID);
 
+            pMicstasy = micstasy_init(midiDeviceIn, midiDeviceOut, bankNumber, deviceID);
+            /* struct micstasy *micstasy_init(int midiDeviceIn, int midiDeviceOut, int bankNumber, int deviceID) */
 
-		if(DEBUG) mexPrintf("calling micstasy_init(0x%x,0x%x,0x%x,0x%x)\n", midiDeviceIn, midiDeviceOut, bankNumber, deviceID);
-
-		pMicstasy = micstasy_init(midiDeviceIn, midiDeviceOut, bankNumber, deviceID);
-		/* struct micstasy *micstasy_init(int midiDeviceIn, int midiDeviceOut, int bankNumber, int deviceID) */
-
-		if(pMicstasy == NULL) mexErrMsgIdAndTxt("micstasy:init", micstasy_errorMessage());
-
-
+            if(pMicstasy == NULL) mexErrMsgIdAndTxt("micstasy:init", micstasy_errorMessage());
+        }
 	}
 	else
 	{
